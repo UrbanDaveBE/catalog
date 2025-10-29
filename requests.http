@@ -1,0 +1,39 @@
+### Alle Bücher abrufen
+GET http://localhost:8080/api/books
+
+###
+
+### Suche mit einem Keyword
+GET http://localhost:8080/api/books/search?query=clean
+
+###
+
+### Suche mit mehreren Keywords (UND-Verknüpfung)
+GET http://localhost:8080/api/books/search?query=clean&query=martin
+
+###
+
+### Suche mit drei Keywords
+GET http://localhost:8080/api/books/search?query=clean&query=agile&query=martin
+
+###
+
+### Buch nach ISBN
+GET http://localhost:8080/api/books/978-0-13-468599-1
+
+###
+
+### Edge Case: Leere Query (sollte 400 Bad Request geben)
+GET http://localhost:8080/api/books/search?query=
+
+###
+
+### Case-insensitive Test
+GET http://localhost:8080/api/books/search?query=CLEAN
+
+###
+
+### Keine Treffer
+GET http://localhost:8080/api/books/search?query=xyz123
+
+###
