@@ -19,16 +19,31 @@ public class BookRestController {
      * Suche nach Büchern anhand eines Suchbegriffs.
      * GET /api/books/search?query=clean+code
      *
-     * @param query Suchbegriff
+     * @param queries Suchbegriff
      * @return Liste der gefundenen Bücher als JSON
      */
     @GetMapping("/search")
-    public ResponseEntity<List<Book>> searchBooks(@RequestParam String query) {
-        if (query == null || query.trim().isEmpty()) {
+    public ResponseEntity<List<Book>> searchBooks(@RequestParam("query") List<String> queries) {
+        //validieren
+        if (queries == null || queries.isEmpty() || queries.stream().allMatch(String::isBlank)) {
             return ResponseEntity.badRequest().build();
         }
 
-        List<Book> books = bookRepository.searchBooks(query.trim());
+        List<String> cleanedQueries= queries.stream()
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toList();
+
+        if(cleanedQueries.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        List<Book> books;
+        if (cleanedQueries.size() == 1) {
+            books =  bookRepository.searchBooks(cleanedQueries.get(0));
+        } else {
+            books = bookRepository.searchBooksByKeywords(cleanedQueries);
+        }
+
         return ResponseEntity.ok(books);
     }
 
