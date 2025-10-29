@@ -1,0 +1,10 @@
+-- Testdaten für Bücher
+INSERT INTO book (isbn, title, description, author) VALUES
+                                                        ('978-0-13-468599-1', 'Clean Code', 'A Handbook of Agile Software Craftsmanship. Even bad code can function. But if code isn''t clean, it can bring a development organization to its knees.', 'Robert C. Martin'),
+                                                        ('978-0-13-235088-4', 'Clean Architecture', 'A Craftsman''s Guide to Software Structure and Design. Building upon the success of best-sellers The Clean Coder and Clean Code.', 'Robert C. Martin'),
+                                                        ('978-0-201-63361-0', 'Design Patterns', 'Elements of Reusable Object-Oriented Software. Capturing a wealth of experience about the design of object-oriented software.', 'Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides'),
+                                                        ('978-0-13-468599-2', 'The Pragmatic Programmer', 'Your Journey to Mastery. Written as a series of self-contained sections and filled with classic and fresh anecdotes.', 'David Thomas, Andrew Hunt'),
+                                                        ('978-0-13-468599-3', 'Refactoring', 'Improving the Design of Existing Code. Refactoring is about improving the design of existing code.', 'Martin Fowler'),
+                                                        ('978-0-13-468599-4', 'Domain-Driven Design', 'Tackling Complexity in the Heart of Software. Leading software designers have recognized domain modeling and design as critical.', 'Eric Evans'),
+                                                        ('978-0-13-468599-5', 'Test Driven Development', 'By Example. Quite simply, test-driven development is meant to eliminate fear in application development.', 'Kent Beck'),
+                                                        ('978-0-13-468599-6', 'Agile Software Development', 'Principles, Patterns, and Practices. Written by a software developer for software developers.', 'Robert C. Martin');
