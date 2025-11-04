@@ -11,6 +11,16 @@ public class Book {
     private String author;
     private String description;
 
+
+    public Book() {
+      }
+    public Book(String isbn, String title, String description, String author) {
+        this.isbn = isbn;
+        this.title = title;
+        this.description = description;
+        this.author = author;
+    }
+
     public String getAuthor() {
         return author;
     }
