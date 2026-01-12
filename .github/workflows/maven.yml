@@ -41,7 +41,10 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_HUB_TOKEN }}
-
+        
+    - name: Run Tests (Verify)
+      run: ./mvnw verify
+      
     - name: Upload Coverage Report
       uses: actions/upload-artifact@v4
       with:
