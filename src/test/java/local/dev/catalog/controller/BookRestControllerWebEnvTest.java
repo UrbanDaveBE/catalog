@@ -43,5 +43,43 @@ public class BookRestControllerWebEnvTest {
         // Optional: Detaillierte Prüfung der Daten (hier Datensatz 1 aus data.sql)
         assertThat(response.getBody()[0].getTitle()).isEqualTo("Clean Code");
     }
+    @Test
+    void shouldReturnFilteredBooksWhenSearchingWithMultipleKeywords() {
+        // Hier testen wir die neue Logik: Mehrere Keywords über die URL
+        String url = "http://localhost:" + port + "/api/books/search?query=clean&query=martin";
 
+        ResponseEntity<Book[]> response = this.restTemplate.getForEntity(url, Book[].class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+
+        // Überprüfe, ob die Filterung funktioniert (z.B. nur Bücher von Martin, die "clean" im Titel haben)
+        for (Book book : response.getBody()) {
+            assertThat(book.getAuthor()).containsIgnoringCase("Martin");
+            assertThat(book.getTitle()).containsIgnoringCase("clean");
+        }
+    }
+
+
+    @Test
+    void searchShouldHandleSingleAndMultipleKeywordsCorrect() {
+        // Pfad 1: Einzelnes Keyword (nutzt repository.searchBooks)
+        String urlSingle = "http://localhost:" + port + "/api/books/search?query=Clean";
+        ResponseEntity<Book[]> responseSingle = restTemplate.getForEntity(urlSingle, Book[].class);
+        assertThat(responseSingle.getBody().length).isGreaterThan(0);
+
+        // Pfad 2: Mehrere Keywords (nutzt repository.searchBooksByKeywords)
+        String urlMulti = "http://localhost:" + port + "/api/books/search?query=Clean&query=Martin";
+        ResponseEntity<Book[]> responseMulti = restTemplate.getForEntity(urlMulti, Book[].class);
+        assertThat(responseMulti.getBody().length).isGreaterThan(0);
+    }
+
+
+    @Test
+    void getBookByIsbn_ShouldReturnNotFoundForUnknownIsbn() {
+        String url = "http://localhost:" + port + "/api/books/999-999-999"; // ISBN die es nicht gibt
+        ResponseEntity<Book> response = restTemplate.getForEntity(url, Book.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
 }

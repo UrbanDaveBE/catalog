@@ -19,21 +19,24 @@ public class BookRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        // Testdaten erstellen -> aktuell nur über data.sql
-        //bookRepository.save(new Book("111", "Clean Code", "A book about clean code", "Robert C. Martin"));
-        //bookRepository.save(new Book("222", "Design Patterns", "A book about design patterns", "Gang of Four"));
-        //bookRepository.save(new Book("333", "Agile Development", "A book about agile", "Martin Fowler"));
+
+        bookRepository.deleteAll(); //Daten aus data.sql entfernen, Testset aus 3 büchern verwenden.
+        // Testdaten erstellen
+        bookRepository.save(new Book("111", "Clean Code", "A Handbook of Agile Software Craftsmanship. Even bad code can function. But if code isn''t clean, it can bring a development organization to its knees.", "Robert C. Martin"));
+        bookRepository.save(new Book("222", "Design Patterns", "Elements of Reusable Object-Oriented Software. Capturing a wealth of experience about the design of object-oriented software.", "Gang of Four"));
+        bookRepository.save(new Book("333", "Agile Development", "A book about agile", "Martin Fowler"));
     }
 
     @Test
     void findAll_returnsAllBooks() {
         // Given - Testdaten in setUp()
+       //setUp();
 
         // When
         List<Book> result = bookRepository.findAll();
 
         // Then
-        assertEquals(8, result.size());
+        assertEquals(3, result.size());
     }
 
     @Test
@@ -42,14 +45,13 @@ public class BookRepositoryTest {
         List<Book> result = bookRepository.searchBooks("Clean");
 
         // Then
-        assertEquals(2, result.size());
+        assertEquals(1, result.size());
 
         // Prüfen, ob die erwarteten Titel in der Ergebnisliste vorhanden sind
         List<String> titles = result.stream()
                 .map(Book::getTitle)
                 .toList();
         assertTrue(titles.contains("Clean Code"));
-        assertTrue(titles.contains("Clean Architecture"));
     }
 
     @Test
@@ -58,7 +60,7 @@ public class BookRepositoryTest {
         List<Book> result = bookRepository.searchBooks("Martin");
 
         // Then
-        assertEquals(4, result.size());
+        assertEquals(2, result.size());
     }
 
     @Test
@@ -67,7 +69,7 @@ public class BookRepositoryTest {
         List<Book> result = bookRepository.searchBooks("CLEAN");
 
         // Then
-        assertEquals(2, result.size());
+        assertEquals(1, result.size());
     }
 
     @Test
@@ -92,7 +94,7 @@ public class BookRepositoryTest {
                 .map(Book::getTitle)
                 .toList();
         assertTrue(titles.contains("Clean Code"));
-        assertTrue(titles.contains("Agile Software Development"));
+        assertTrue(titles.contains("Agile Development"));
     }
 
     @Test

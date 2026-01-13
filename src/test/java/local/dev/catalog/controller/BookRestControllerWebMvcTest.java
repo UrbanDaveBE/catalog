@@ -45,4 +45,19 @@ public class BookRestControllerWebMvcTest {
                         """));
     }
 
+
+    @Test
+    void searchWithEmptyQueryShouldReturnBadRequest() throws Exception {
+        // Teste, ob leere Query-Parameter (z.B. ?query=  ) korrekt abgefangen werden
+        mockMvc.perform(get("/api/books/search").param("query", "   "))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void searchWithoutQueryParamShouldReturnBadRequest() throws Exception {
+        // Teste, was passiert, wenn der Parameter komplett fehlt
+        mockMvc.perform(get("/api/books/search"))
+                .andExpect(status().isBadRequest());
+    }
+
 }
