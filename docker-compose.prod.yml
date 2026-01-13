@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  catalog:
+    image: "urbandave/catalog:6" # ERSETZEN 42 DURCH DIE ECHTE RUN_NUMBER
+    ports:
+      - "8080:8080"
+    restart: on-failure
+
+  order:
+    image: "urbandave/order:43" # ERSETZEN DURCH DIE ECHTE RUN_NUMBER
+    ports:
+      - "8081:8081"
+    restart: on-failure
+    environment:
+      - catalog.base.url=http://catalog:8080
+    depends_on:
+      - catalog
+  # --- Monitoring Stack (NEU) ---
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      # Wir müssen eine Config-Datei in den Container mappen
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      # Standard-Startbefehl + Config-Pfad
+      - '--config.file=/etc/prometheus/prometheus.yml'
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
