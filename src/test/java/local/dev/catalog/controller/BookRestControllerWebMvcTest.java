@@ -111,8 +111,6 @@ public class BookRestControllerWebMvcTest {
                 .andExpect(status().isBadRequest());
     }
 
-}
-
     @Test
     void shouldReturnBookWhenIsbnExists() throws Exception {
         // Testet den Erfolgsfall bei ISBN Suche
@@ -124,4 +122,5 @@ public class BookRestControllerWebMvcTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Found Me"));
     }
+
 }
