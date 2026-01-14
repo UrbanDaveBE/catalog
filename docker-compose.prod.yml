@@ -13,7 +13,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
   catalog:
-    image: "urbandave/catalog:16" # ERSETZEN 42 DURCH DIE ECHTE RUN_NUMBER
+    image: "urbandave/catalog:17" # ERSETZEN 42 DURCH DIE ECHTE RUN_NUMBER
     ports:
       - "8080:8080"
     restart: on-failure
