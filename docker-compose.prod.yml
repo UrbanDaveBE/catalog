@@ -13,7 +13,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
   catalog:
-    image: "urbandave/catalog:14" # ERSETZEN 42 DURCH DIE ECHTE RUN_NUMBER
+    image: "urbandave/catalog:16" # ERSETZEN 42 DURCH DIE ECHTE RUN_NUMBER
     ports:
       - "8080:8080"
     restart: on-failure
@@ -27,7 +27,7 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
 
   order:
-    image: "urbandave/order:50" # ERSETZEN DURCH DIE ECHTE RUN_NUMBER
+    image: "urbandave/order:51" # ERSETZEN DURCH DIE ECHTE RUN_NUMBER
     ports:
       - "8081:8081"
     restart: on-failure

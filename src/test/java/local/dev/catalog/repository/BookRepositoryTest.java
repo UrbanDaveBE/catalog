@@ -5,22 +5,33 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
+// 2. Aktiviert Testcontainers
+@Testcontainers
 public class BookRepositoryTest {
+
+    // 3. Hier definieren wir den echten Postgres-Container
+    // "@ServiceConnection" sorgt dafür, dass Spring sich automatisch damit verbindet.
+    @Container
+    @ServiceConnection
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine");
+
     @Autowired
     private BookRepository bookRepository;
 
     @BeforeEach
     void setUp() {
-
-        bookRepository.deleteAll(); //Daten aus data.sql entfernen, Testset aus 3 büchern verwenden.
+        bookRepository.deleteAll();
         // Testdaten erstellen
         bookRepository.save(new Book("111", "Clean Code", "A Handbook of Agile Software Craftsmanship. Even bad code can function. But if code isn''t clean, it can bring a development organization to its knees.", "Robert C. Martin"));
         bookRepository.save(new Book("222", "Design Patterns", "Elements of Reusable Object-Oriented Software. Capturing a wealth of experience about the design of object-oriented software.", "Gang of Four"));
@@ -29,9 +40,6 @@ public class BookRepositoryTest {
 
     @Test
     void findAll_returnsAllBooks() {
-        // Given - Testdaten in setUp()
-       //setUp();
-
         // When
         List<Book> result = bookRepository.findAll();
 
@@ -47,7 +55,6 @@ public class BookRepositoryTest {
         // Then
         assertEquals(1, result.size());
 
-        // Prüfen, ob die erwarteten Titel in der Ergebnisliste vorhanden sind
         List<String> titles = result.stream()
                 .map(Book::getTitle)
                 .toList();
@@ -87,9 +94,8 @@ public class BookRepositoryTest {
         List<Book> result = bookRepository.searchBooks("agi");
 
         // Then
-        assertEquals(2, result.size()); // Stellt sicher, dass es 2 Bücher sind
+        assertEquals(2, result.size());
 
-        // Prüfen, ob die erwarteten Titel vorhanden sind
         List<String> titles = result.stream()
                 .map(Book::getTitle)
                 .toList();
@@ -105,11 +111,9 @@ public class BookRepositoryTest {
         // Then
         assertEquals(1, result.size());
 
-        // Prüfen, ob die erwarteten Titel vorhanden sind
         List<String> titles = result.stream()
                 .map(Book::getTitle)
                 .toList();
         assertTrue(titles.contains("Clean Code"));
-        //assertTrue(titles.contains("Clean Architecture"));
     }
 }

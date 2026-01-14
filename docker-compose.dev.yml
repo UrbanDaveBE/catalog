@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  # Nur die Datenbank! Keine Java Apps.
+  catalog-db:
+    image: postgres:15-alpine
+    container_name: catalog-db-dev # Fester Name, damit wir ihn leicht finden
+    environment:
+      - POSTGRES_USER=catalog
+      - POSTGRES_PASSWORD=catalog
+      - POSTGRES_DB=catalog
+    ports:
+      - "5432:5432" # Wichtig: Mappt auf deinen Localhost Port
+    volumes:
+      - postgres-data-dev:/var/lib/postgresql/data # Daten behalten
+
+  # Optional: Ein Admin-Tool für die DB (GUI im Browser)
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin-dev
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - catalog-db
+
+volumes:
+  postgres-data-dev:
