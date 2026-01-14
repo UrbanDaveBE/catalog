@@ -1,11 +1,28 @@
 version: '3.8'
 
 services:
+  catalog-db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=catalog
+      - POSTGRES_PASSWORD=catalog
+      - POSTGRES_DB=catalog
+    ports:
+      - "5432:5432"
+
   catalog:
     image: "urbandave/catalog:6" # ERSETZEN 42 DURCH DIE ECHTE RUN_NUMBER
     ports:
       - "8080:8080"
     restart: on-failure
+    depends_on:
+      - catalog-db  # Warte, bis die DB läuft
+    environment:
+      # Wir überschreiben die application.properties von außen:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://catalog-db:5432/catalog
+      - SPRING_DATASOURCE_USERNAME=catalog
+      - SPRING_DATASOURCE_PASSWORD=catalog
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
 
   order:
     image: "urbandave/order:43" # ERSETZEN DURCH DIE ECHTE RUN_NUMBER
